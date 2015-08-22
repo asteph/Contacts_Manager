@@ -10,15 +10,32 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <style>
+        h1{
+            display: inline-block;
+        }
+        th{
+            font-size: 1.5rem;
+        }
+        #search{
+            display: inline-block;
+            margin-top: 20px;
+            padding: 0px 0px 20px 0px;
+        }
         #edit{
-            margin-right: .25rem;
+            margin-right: .5rem;
+        }
+        .btn{
+            padding: 3px 5px 3px 5px;
         }
     </style>
 
 </head>
 <body>
     <main class="col-md-10 col-md-offset-1">
-        <h1>Contacts Manager</h1>
+        <h1 class="pull-left">Contacts Manager</h1>
+        <div  id="search" class="pull-right col-sm-3 col-xs-12">
+            <input type="text" class="form-control " placeholder="Contact Search" name="search">
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
