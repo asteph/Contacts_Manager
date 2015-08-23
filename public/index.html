@@ -22,7 +22,6 @@
             padding: 0px 0px 20px 0px;
         }
         .action{
-            margin-right: .5rem;
             padding: 3px 5px 3px 5px;
         }
         
@@ -46,55 +45,90 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Bob</td>
-                    <td>bob@mail.com</td>
-                    <td>123-123-1234</td>
+                    <td class="name">Bob</td>
+                    <td class="email">bob@mail.com</td>
+                    <td class="phone">123-123-1234</td>
                     <td>
-                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                        <button class="edit-button action btn btn-default" data-toggle="modal" data-target="#editModal">Edit</button>
+                        <button class="remove-button action btn btn-danger">Remove</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>Sarah</td>
-                    <td>sarah@mail.com</td>
-                    <td>123-123-1234</td>
+                    <td class="name">Sarah</td>
+                    <td class="email">sarah@mail.com</td>
+                    <td class="phone">123-123-1234</td>
                     <td>
-                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                        <button class="edit-button action btn btn-default" data-toggle="modal" data-target="#editModal">Edit</button>
+                        <button class="remove-button action btn btn-danger">Remove</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>Joe</td>
-                    <td>joe@mail.com</td>
-                    <td>123-123-1234</td>
+                    <td class="name">Joe</td>
+                    <td class="email">joe@mail.com</td>
+                    <td class="phone">123-123-1234</td>
                     <td>
-                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                        <button class="edit-button action btn btn-default" data-toggle="modal" data-target="#editModal">Edit</button>
+                        <button class="remove-button action btn btn-danger">Remove</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>Mary</td>
-                    <td>mary@mail.com</td>
-                    <td>123-123-1234</td>
+                    <td class="name">Mary</td>
+                    <td class="email">mary@mail.com</td>
+                    <td class="phone">123-123-1234</td>
                     <td>
-                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                        <button class="edit-button action btn btn-default" data-toggle="modal" data-target="#editModal">Edit</button>
+                        <button class="remove-button action btn btn-danger">Remove</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <!-- modal for editing contact information -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="editModalLabel">Edit Contact</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="contact-name" class="control-label">Name</label>
+                                <input type="text" class="form-control" id="contact-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email" class="control-label">Email address</label>
+                                <input type="text" class="form-control" id="contact-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone" class="control-label">Phone number</label>
+                                <input type="text" class="form-control" id="contact-phone">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="save-button" type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <h2>Add Contact</h2>
         <form>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter name">
+                <input type="text" class="form-control" id="form-name" placeholder="Enter name">
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                <input type="email" class="form-control" id="form-email" placeholder="Enter email">
             </div>
             <div class="form-group">
                 <label for="phone-number">Phone number</label>
-                <input type="number" class="form-control" id="phone-number" placeholder="Enter phone-number">
+                <input type="number" class="form-control" id="form-phone-number" placeholder="Enter phone-number">
             </div>
-            <button type="submit" class="btn btn-default">Clear</button>
-            <button type="submit" class="btn btn-success">Add Contact</button>
+            <button id="clear-button" class="btn btn-default">Clear</button>
+            <button id="add-button" class="btn btn-success">Add Contact</button>
         </form>
     </main>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -102,14 +136,35 @@
     <script type="text/javascript">
     "use strict";
     $(document).ready(function() {
+
         //removes contact if 'remove' button is clicked 
         $('.remove-button').on('click',function()
         {
-            var name = $(this).parents('tr').children('td').first().html();
+            var name = $(this).parent().siblings('.name').html();
             if(confirm('Are you sure you want to remove ' + name + '?')){
                 $(this).parents('tr').html('');
-            };
-
+            }
+        });
+        //populate modal with contact info
+        $('#editModal').on('show.bs.modal', function (event) {
+            var modal = $(this);
+            // Button that triggered the modal
+            var button = $(event.relatedTarget);
+            //contact attributes based on trigger button
+            var name = button.parent().siblings('.name'); 
+            var email = button.parent().siblings('.email'); 
+            var phone = button.parent().siblings('.phone'); 
+            //inserting values into form
+            modal.find('#contact-name').val(name.html());
+            modal.find('#contact-email').val(email.html());
+            modal.find('#contact-phone').val(phone.html());
+            //save any changes made in the edit modal if save button clicked
+            $('#save-button').on('click',function()
+            {
+                name.html(modal.find('#contact-name').val()); 
+                email.html(modal.find('#contact-email').val()); 
+                phone.html(modal.find('#contact-phone').val()); 
+            });    
         });
     });
     </script>
