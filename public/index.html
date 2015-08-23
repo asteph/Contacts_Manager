@@ -49,25 +49,33 @@
                     <td>Bob</td>
                     <td>bob@mail.com</td>
                     <td>123-123-1234</td>
-                    <td><button id="edit"class="action btn btn-default" type="submit">Edit</button><button id="remove"class="action btn btn-danger" type="submit">Remove</button></td>
+                    <td>
+                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                    </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>Sarah</td>
                     <td>sarah@mail.com</td>
                     <td>123-123-1234</td>
-                    <td><button id="edit" class="action btn btn-default" type="submit">Edit</button><button id="remove" class="action btn btn-danger" type="submit">Remove</button></td>
+                    <td>
+                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                    </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>Joe</td>
                     <td>joe@mail.com</td>
                     <td>123-123-1234</td>
-                    <td><button id="edit" class="action btn btn-default" type="submit">Edit</button><button id="remove" class="action btn btn-danger" type="submit">Remove</button></td>
+                    <td>
+                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                    </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>Mary</td>
                     <td>mary@mail.com</td>
                     <td>123-123-1234</td>
-                    <td><button id="edit" class="action btn btn-default" type="submit">Edit</button><button id="remove" class="action btn btn-danger" type="submit">Remove</button></td>
+                    <td>
+                        <button  class="edit-button action btn btn-default" type="submit">Edit</button><button  class="remove-button action btn btn-danger" type="submit">Remove</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -93,7 +101,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript">
     "use strict";
-    // Include all compiled plugins (below), or include individual files as needed
+    $(document).ready(function() {
+        //removes contact if 'remove' button is clicked 
+        $('.remove-button').on('click',function()
+        {
+            var name = $(this).parents('tr').children('td').first().html();
+            if(confirm('Are you sure you want to remove ' + name + '?')){
+                $(this).parents('tr').html('');
+            };
+
+        });
+    });
     </script>
     <script src="js/bootstrap.min.js"></script>
 </body>
