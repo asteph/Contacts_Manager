@@ -117,40 +117,44 @@
         <form>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="form-name" placeholder="Enter name">
+                <input type="text" class="form-control" id="form-name" placeholder="Enter name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="form-email" placeholder="Enter email">
+                <input type="email" class="form-control" id="form-email" placeholder="Enter email" required>
             </div>
             <div class="form-group">
                 <label for="phone-number">Phone number</label>
-                <input type="number" class="form-control" id="form-phone-number" placeholder="Enter phone-number">
+                <input class="form-control" id="form-phone" placeholder="Enter phone number" required>
             </div>
-            <button id="clear-button" class="btn btn-default">Clear</button>
-            <button id="add-button" class="btn btn-success">Add Contact</button>
+            <button id="clear-button" type="button" class="btn btn-default">Clear</button>
+            <button id="add-button" type="submit" class="btn btn-success">Add Contact</button>
         </form>
     </main>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/jquery.maskedinput.js" type="text/javascript"></script>
     <script type="text/javascript">
     "use strict";
     $(document).ready(function() {
-
+        //add mask to Add Contact form on Phone Number for consistent formatting
+        jQuery(function($){
+           $("#form-phone").mask("999-999-9999");
+        });
         //removes contact if 'remove' button is clicked 
-        $('.remove-button').on('click',function()
+        $('tbody').on('click','.remove-button',function()
         {
             var name = $(this).parent().siblings('.name').html();
             if(confirm('Are you sure you want to remove ' + name + '?')){
                 $(this).parents('tr').html('');
             }
         });
-        //populate modal with contact info
+        //populate edit modal with contact info and allow changes
         $('#editModal').on('show.bs.modal', function (event) {
             var modal = $(this);
             // Button that triggered the modal
             var button = $(event.relatedTarget);
-            //contact attributes based on trigger button
+            //contact attributes from table based on trigger edit button
             var name = button.parent().siblings('.name'); 
             var email = button.parent().siblings('.email'); 
             var phone = button.parent().siblings('.phone'); 
@@ -165,6 +169,17 @@
                 email.html(modal.find('#contact-email').val()); 
                 phone.html(modal.find('#contact-phone').val()); 
             });    
+        });
+        //add a new contact using form validation
+        $('#add-button').click(function(event){
+            //check to ensure all fields have values before creating new tr
+            if(!(jQuery.isEmptyObject($(document).find('#form-name').val()) || jQuery.isEmptyObject($(document).find('#form-email').val()) || jQuery.isEmptyObject($(document).find('#form-phone').val()))){
+                $('tbody').append("<tr> <td class='name'>" + $(document).find('#form-name').val() + "</td> <td class='email'>" + $(document).find('#form-email').val() + "</td> <td class='phone'>" + $(document).find('#form-phone').val() + "</td> <td> <button class='edit-button action btn btn-default' data-toggle='modal' data-target='#editModal'>Edit</button> <button class='remove-button action btn btn-danger'>Remove</button> </td> </tr>");
+            }
+            //wanted to use submit type instead of button type so that form validation would pop up
+            $('form').submit(function(event){
+                event.preventDefault();
+            });
         });
     });
     </script>
