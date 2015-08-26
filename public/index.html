@@ -110,14 +110,14 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="save-button" type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="save-button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
                     </div>
                 </div>
             </div>
         </div>
         <h2>Add Contact</h2>
-        <form>
+        <form id="contactForm">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="form-name" placeholder="Enter name" required>
@@ -145,47 +145,64 @@
            $("#form-phone").mask("999-999-9999");
         });
         //removes contact if 'remove' button is clicked 
-        $('tbody').on('click','.remove-button',function()
+        $('tbody').on('click','.remove-button', function()
         {
             var name = $(this).parent().siblings('.name').html();
             if(confirm('Are you sure you want to remove ' + name + '?')){
                 $(this).parents('tr').html('');
             }
         });
+
+        var lastEditButton = null;
+
         //populate edit modal with contact info and allow changes
         $('#editModal').on('show.bs.modal', function (event) {
             var modal = $(this);
             // Button that triggered the modal
             var button = $(event.relatedTarget);
+            lastEditButton = button;
+
             //contact attributes from table based on trigger edit button
             var name = button.parent().siblings('.name'); 
             var email = button.parent().siblings('.email'); 
-            var phone = button.parent().siblings('.phone'); 
+            var phone = button.parent().siblings('.phone');
+
             //inserting values into form
             modal.find('#contact-name').val(name.html());
             modal.find('#contact-email').val(email.html());
             modal.find('#contact-phone').val(phone.html());
             //save any changes made in the edit modal if save button clicked
-            $('#save-button').on('click',function()
-            {
-                name.html(modal.find('#contact-name').val()); 
-                email.html(modal.find('#contact-email').val()); 
-                phone.html(modal.find('#contact-phone').val()); 
-            });    
+
+        });
+
+        $('#save-button').on('click',function()
+        {
+            var name = lastEditButton.parent().siblings('.name'); 
+            var email = lastEditButton.parent().siblings('.email'); 
+            var phone = lastEditButton.parent().siblings('.phone'); 
+
+            name.html($('#contact-name').val()); 
+            email.html($('#contact-email').val()); 
+            phone.html($('#contact-phone').val()); 
+        }); 
+
+        $('#contactForm').on('submit', function () {
+            console.log('submitted');
+            return false;
         });
         
 
-        //add a new contact using form validation
-        $('#add-button').click(function(event){
-            //check to ensure all fields have values before creating new tr
-            if(!(jQuery.isEmptyObject($(document).find('#form-name').val()) || jQuery.isEmptyObject($(document).find('#form-email').val()) || jQuery.isEmptyObject($(document).find('#form-phone').val()))){
-                $('tbody').append("<tr> <td class='name'>" + $(document).find('#form-name').val() + "</td> <td class='email'>" + $(document).find('#form-email').val() + "</td> <td class='phone'>" + $(document).find('#form-phone').val() + "</td> <td> <button class='edit-button action btn btn-default' data-toggle='modal' data-target='#editModal'>Edit</button> <button class='remove-button action btn btn-danger'>Remove</button> </td> </tr>");
-            }
-            //wanted to use submit type instead of button type so that form validation would pop up
-            $('form').submit(function(event){
-                event.preventDefault();
-            });
-        });
+        // //add a new contact using form validation
+        // $('#add-button').click(function(event){
+        //     //check to ensure all fields have values before creating new tr
+        //     if(!(jQuery.isEmptyObject($(document).find('#form-name').val()) || jQuery.isEmptyObject($(document).find('#form-email').val()) || jQuery.isEmptyObject($(document).find('#form-phone').val()))){
+        //         $('tbody').append("<tr> <td class='name'>" + $(document).find('#form-name').val() + "</td> <td class='email'>" + $(document).find('#form-email').val() + "</td> <td class='phone'>" + $(document).find('#form-phone').val() + "</td> <td> <button class='edit-button action btn btn-default' data-toggle='modal' data-target='#editModal'>Edit</button> <button class='remove-button action btn btn-danger'>Remove</button> </td> </tr>");
+        //     }
+        //     //wanted to use submit type instead of button type so that form validation would pop up
+        //     $('form').submit(function(event){
+        //         event.preventDefault();
+        //     });
+        // });
         //search bar: only shows contacts that contain search text limited to tbody so thead stays
         $('#search-input').keyup(function () {
             var search = $(document).find('#search-input').val();
